@@ -20,14 +20,13 @@ TARGET		:=	$(notdir $(CURDIR))
 BUILD		:=	build
 SOURCES		:=	src src/lib/libpng/pngu
 DATA		:=	
-#data  
 INCLUDES	:=
 
 #---------------------------------------------------------------------------------
 # options for code generation
 #---------------------------------------------------------------------------------
 
-CFLAGS	= -DNOOPENGL-g -O3 -Wall $(MACHDEP) $(INCLUDE)
+CFLAGS	= -D_WII_ -DNOOPENGL -g -O3 -Wall $(MACHDEP) $(INCLUDE)
 CXXFLAGS	=	$(CFLAGS)
 
 LDFLAGS	=	-g $(MACHDEP) -Wl,-Map,$(notdir $@).map
@@ -35,7 +34,7 @@ LDFLAGS	=	-g $(MACHDEP) -Wl,-Map,$(notdir $@).map
 #---------------------------------------------------------------------------------
 # any extra libraries we wish to link with the project
 #---------------------------------------------------------------------------------
-LIBS	:=	 -lSDL_Image -lSDL_Mixer -lfreetype -ljpeg -lpng -lz -lSDL -lfat -lwiiuse -lbte -logc -lm -lwiikeyboard
+LIBS	:=	 -lSDL_Image -lSDL_Mixer -ljpeg -lpng -lz -lSDL -lfat -lwiiuse -lbte -logc -lm -lwiikeyboard
  
 #--------------------------------------------------------------------------------
 # list of directories containing libraries, this must be the top level containing
