@@ -15,16 +15,18 @@ include $(DEVKITPPC)/wii_rules
 # SOURCES is a list of directories containing source code
 # INCLUDES is a list of directories containing extra header files
 #---------------------------------------------------------------------------------
+
 TARGET		:=	$(notdir $(CURDIR))
 BUILD		:=	build
 SOURCES		:=	src src/lib/libpng/pngu
-DATA		:=	data/images/title data/images/background data/images/icons data/images/shared data/images/status data/images/tilesets data/images/worldmap
+DATA		:=	
 INCLUDES	:=
+
 #---------------------------------------------------------------------------------
 # options for code generation
 #---------------------------------------------------------------------------------
 
-CFLAGS	= -Wno-write-strings -D_WII_ -DNOOPENGL -g -O3 -fsigned-char -Wall $(MACHDEP) $(INCLUDE)
+CFLAGS	= -D_WII_ -DNOOPENGL -g -O3 -Wall $(MACHDEP) $(INCLUDE)
 CXXFLAGS	=	$(CFLAGS)
 
 LDFLAGS	=	-g $(MACHDEP) -Wl,-Map,$(notdir $@).map
@@ -32,13 +34,16 @@ LDFLAGS	=	-g $(MACHDEP) -Wl,-Map,$(notdir $@).map
 #---------------------------------------------------------------------------------
 # any extra libraries we wish to link with the project
 #---------------------------------------------------------------------------------
-LIBS	:=	 -lSDL_Image -lSDL_Mixer -lvorbisidec -lsmpeg -ljpeg -lpng -lz -lSDL -lfat -lwiiuse -lbte -logc -lm -lwiikeyboard
+LIBS	:=	 -lSDL_net -lSDL_ttf -lSDL_gfx -lSDL_mixer -lSDL_image -lsmpeg \
+                -lSDL -ljpeg -lpng -lfreetype -lvorbisidec \
+                -lz -lfat -lwiiuse -lbte -logc -lm -lwiikeyboard
 
-#---------------------------------------------------------------------------------
+ 
+#--------------------------------------------------------------------------------
 # list of directories containing libraries, this must be the top level containing
 # include and lib
 #---------------------------------------------------------------------------------
-LIBDIRS	:=
+LIBDIRS	:= -L../../../libogc/lib/wii
 
 #---------------------------------------------------------------------------------
 # no real need to edit anything past this point unless you need to add additional
@@ -105,7 +110,7 @@ clean:
 
 #---------------------------------------------------------------------------------
 run:
-	wiiload $(OUTPUT).dol
+	wiiload $(TARGET).dol
 
 
 #---------------------------------------------------------------------------------
@@ -118,16 +123,6 @@ DEPENDS	:=	$(OFILES:.o=.d)
 #---------------------------------------------------------------------------------
 $(OUTPUT).dol: $(OUTPUT).elf
 $(OUTPUT).elf: $(OFILES)
-
-#---------------------------------------------------------------------------------
-# This rule links in binary data with the .mp3 extension
-#---------------------------------------------------------------------------------
-%.png.o	:	%.png
-#---------------------------------------------------------------------------------
-	@echo $(notdir $<)
-	$(bin2o)
-
--include $(DEPENDS)
 
 #---------------------------------------------------------------------------------
 # This rule links in binary data with the .jpg extension
